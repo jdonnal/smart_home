@@ -1,0 +1,93 @@
+{% extends "layout.jinja2" %}
+
+{% block title %} Home Dashboard {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="assets/css/index.css">
+{% endblock %}
+
+{% block js %}
+<script>
+
+
+	$(function() {
+
+		var data = {{ power_data }}
+
+		$.plot("#plot", [ data ],
+            {
+                xaxis: { mode: "time", timeBase: "milliseconds"}
+            });
+
+		// Add the Flot version string to the footer
+
+	});
+
+
+</script>
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row equal">
+        <!-- Current Weather -->
+        <div class="col-sm mt-3 d-flex">
+            <div class="card flex-fill">
+              <div class="card-header">
+                Current Weather
+              </div>
+              <div class="card-body">
+                <table class="table table-borderless table-striped">
+                      <tbody>
+                      {% for i in range(weather|length()) %}
+                          {% if weather_stream.elements[i].name in display_elements %}
+                            <tr>
+                                <td>{{ weather_stream.elements[i].name }}</td>
+                                <td>{{ weather[i] }} {{ weather_stream.elements[i].units }}</td>
+                            </tr>
+                          {% endif %}
+                      {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+            </div>
+        </div>
+        <!-- Forecast -->
+        <div class="col-sm mt-3">
+            <div class="card">
+              <div class="card-header">
+                Local Forecast
+              </div>
+              <div class="card-body">
+                  <table class="table table-borderless table-striped">
+                      <tbody>
+                      {% for f in forecast %}
+                        <tr>
+                            <td>{{ f.datetime.strftime("%a") }}</td>
+                            <td>{{ "%.0f"%f.temp_max }}</td>
+                            <td><i class="fas {{ f.weather_icon }}"></i></td>
+                            <td>{{ f.description }}</td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <!-- Forecast -->
+        <div class="col-md mt-3">
+            <div class="card">
+              <div class="card-header">
+                Power Usage (kW)
+              </div>
+              <div class="card-body">
+                  <div id="plot" style="height: 300px"></div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
