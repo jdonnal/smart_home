@@ -16,7 +16,8 @@
 
 		$.plot("#plot", [ data ],
             {
-                xaxis: { mode: "time", timeBase: "milliseconds"}
+                xaxis: { mode: "time", timeBase: "milliseconds"},
+		series: {lines: {lineWidth: 2}}
             });
 
 		// Add the Flot version string to the footer
